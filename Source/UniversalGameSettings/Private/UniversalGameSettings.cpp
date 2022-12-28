@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 /**
  * Copyright: Aimo_皑墨
  * Open source protocol: MIT License
