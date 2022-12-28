@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 /**
  * Copyright: Aimo_皑墨
  * Open source protocol: MIT License
@@ -86,21 +84,21 @@ public:
 
 	void SetButtonResource(UButton* InButton, UObject* InResource = nullptr);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
 	void OnPressed0_Event();
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
 	void OnPressed1_Event();
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
 	void OnPressed2_Event();
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
 	void OnPressed3_Event();
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
 	void OnPressed4_Event();
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
 	void OnPressed5_Event();
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
 	void OnPressed6_Event();
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
 	void OnPressed7_Event();
 	
 
