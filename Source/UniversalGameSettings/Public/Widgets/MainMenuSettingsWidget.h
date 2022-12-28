@@ -49,15 +49,15 @@ public:
 		TArray<FText> ButtonNames;
 
 	UPROPERTY(BlueprintReadWrite, Category = "Aimo|Variable")
-		/** 控件组 */
+		/** 已生成的控件组 */
 		TArray<UWidget*> WidgetSwitcherWidgets;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Aimo|Variable")
-		/** 控件类组 */
+		/** 对应按钮点击生成的控件类组 */
 		TArray<TSoftClassPtr<class UWidget>> WidgetSwitcherSoftClassPtr;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Aimo|Variable")
-		/** 控件类组 */
+		/** 按钮类控件(能不动就不动) */
 		TSoftClassPtr<class UUserWidget> ButtonSoftClassPtr;
 		
 
@@ -69,9 +69,11 @@ protected:
 public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Aimo|Function")
+		/** 初始化控件 */
 		void InitWdiget();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Aimo|Function")
+		/** 调用触发事件 */
 		void OnTrigger_Event(int& OnType, FString& OnUID);
 		void NativeOnTrigger_Event(int OnType, FString OnUID);
 };

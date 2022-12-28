@@ -45,20 +45,16 @@ public:
 		/** 按钮 */
 		UHorizontalBox* HorizontalBoxWidget;
 
-	UPROPERTY(BlueprintReadOnly, Meta = (BindWidget), Category = "Aimo|Variable")
-		/** 按钮(不一定需要) */
-		TArray<UButton*> Buttons;
-
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Aimo|Variable")
-		/**  */
+		/** 资源图片组 */
 		TArray<UObject*> ImageResources;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Aimo|Variable")
-		/**  */
+		/** 选择索引 */
 		int SelectInde;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Aimo|Variable")
-		/**  */
+		/** 识别的UID */
 		FString UID;
 
 
@@ -80,10 +76,12 @@ public:
 	void InitWidget(FString InUID, TArray<UObject*> InResources, TArray<FText> InTexts,int ButtonNum = 4);
 
 	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
+		/* * 修改选项索引 */
 	void SetSelect(int InIndex, UObject* InResource = nullptr);
 
 	void SetButtonResource(UButton* InButton, UObject* InResource = nullptr);
 
+	/* * 最大支持的按钮数量 */
 	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
 	void OnPressed0_Event();
 	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
