@@ -97,7 +97,7 @@ void USelectLatticesWidget::SetButtonResource(UButton* InButton, UObject* InReso
 {
 	if (InButton)
 	{
-		FButtonStyle ButtonStyle = InButton->WidgetStyle;
+		FButtonStyle ButtonStyle = InButton->GetStyle();
 		FSlateBrush InNormal;
 		InResource = InResource ? InResource : (ImageResources.Num() > 1 ? ImageResources[1] : nullptr);
 		ButtonStyle.Normal.SetResourceObject(InResource);
