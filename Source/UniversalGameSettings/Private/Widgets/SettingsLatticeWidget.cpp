@@ -23,9 +23,9 @@ void USettingsLatticeWidget::NativeConstruct()
 
 	if (Button_Widget)
 	{
-		TScriptDelegate<FWeakObjectPtr> OnSetDragPrt; //建立对接变量
-		OnSetDragPrt.BindUFunction(this, "OnPressed_Event"); //对接变量绑定函数
-		Button_Widget->OnPressed.Add(OnSetDragPrt);
+		FScriptDelegate ScriptDelegate; //建立对接变量
+		ScriptDelegate.BindUFunction(this, "OnPressed_Event"); //对接变量绑定函数
+		Button_Widget->OnPressed.Add(ScriptDelegate);
 	}
 
 }

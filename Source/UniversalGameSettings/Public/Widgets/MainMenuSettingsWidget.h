@@ -19,8 +19,9 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 
-#include "Components/VerticalBox.h"
+#include "Components/ScrollBox.h"
 #include "Components/WidgetSwitcher.h"
+#include "WidgetExpansions/Public/SelectScrollBox/SelectScrollBox.h"
 
 #include "MainMenuSettingsWidget.generated.h"
 
@@ -34,29 +35,29 @@ class UNIVERSALGAMESETTINGS_API UMainMenuSettingsWidget : public UUserWidget
 	
 public:
 
-	UPROPERTY(BlueprintReadOnly, Meta = (BindWidget), Category = "Aimo|Variable")
-		/** 设置类型选项框 */
-		UVerticalBox* VerticalBox_Lootices;
+	/** 设置类型选项框 */
+	UPROPERTY(BlueprintReadOnly, Meta = (BindWidget), Category = "MainMenuSettingsWidget|Variable")
+	TObjectPtr<USelectScrollBox>  SelectScrollBox;
 
-	UPROPERTY(BlueprintReadOnly, Meta = (BindWidget), Category = "Aimo|Variable")
-		/** 切换控件 */
-		UWidgetSwitcher* WidgetSwitcher;
+	/** 切换控件 */
+	UPROPERTY(BlueprintReadOnly, Meta = (BindWidget), Category = "MainMenuSettingsWidget|Variable")
+	TObjectPtr<UWidgetSwitcher> WidgetSwitcher;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Aimo|Variable")
-		/** 类型名字 */
-		TArray<FText> ButtonNames;
+	/** 识别的UID */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MainMenuSettingsWidget|Variable")
+	TArray<FString> IDs;
 
-	UPROPERTY(BlueprintReadWrite, Category = "Aimo|Variable")
-		/** 已生成的控件组 */
-		TArray<UWidget*> WidgetSwitcherWidgets;
+	/** 类型名字 */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MainMenuSettingsWidget|Variable")
+	TArray<FText> ButtonNames;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Aimo|Variable")
-		/** 对应按钮点击生成的控件类组 */
-		TArray<TSoftClassPtr<class UWidget>> WidgetSwitcherSoftClassPtr;
+	/** 已生成的控件组 */
+	UPROPERTY(BlueprintReadWrite, Category = "MainMenuSettingsWidget|Variable")
+	TArray<TObjectPtr<UWidget>> WidgetSwitcherWidgets;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Aimo|Variable")
-		/** 按钮类控件(能不动就不动) */
-		TSoftClassPtr<class UUserWidget> ButtonSoftClassPtr;
+	/** 对应按钮点击生成的控件类组 */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MainMenuSettingsWidget|Variable")
+	TArray<TSoftClassPtr<class UWidget>> WidgetSwitcherSoftClassPtr;
 		
 
 protected:
@@ -66,12 +67,13 @@ protected:
 
 public:
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Aimo|Function")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MainMenuSettingsWidget|Function")
 		/** 初始化控件 */
 		void InitWdiget();
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Aimo|Function")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MainMenuSettingsWidget|Function")
 		/** 调用触发事件 */
-		void OnTrigger_Event(int& OnType, FString& OnUID);
-		void NativeOnTrigger_Event(int OnType, FString OnUID);
+		void OnTrigger_Event(const FString& OnID, const FString& SelectID);
+		void NativeOnTrigger_Event(const FString& OnID, const FString& SelectID);
+
 };

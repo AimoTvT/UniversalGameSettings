@@ -48,16 +48,18 @@ public:
 		TArray<UObject*> ImageResources;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Aimo|Variable")
-		/** 选择索引 */
-		int SelectInde;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Aimo|Variable")
 		/** 识别的UID */
 		FString UID;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Aimo|Variable")
+		/** 选择索引 */
+		int SelectInde;
+
+	
+
 
 	/** * 委托宏2个输入 */
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCommunication, FString, OnUID, int, OnIndex);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCommunication, FString, OnUID);
 
 	UPROPERTY(BlueprintAssignable, Category = "Aimo|On") //蓝图公开并分类
 		/** * 触发的委托变量 */
@@ -81,21 +83,7 @@ public:
 
 	/* * 最大支持的按钮数量 */
 	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
-	void OnPressed0_Event();
-	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
-	void OnPressed1_Event();
-	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
-	void OnPressed2_Event();
-	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
-	void OnPressed3_Event();
-	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
-	void OnPressed4_Event();
-	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
-	void OnPressed5_Event();
-	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
-	void OnPressed6_Event();
-	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
-	void OnPressed7_Event();
+	void OnPressed_Event();
 	
 
 };

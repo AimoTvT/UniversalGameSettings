@@ -39,10 +39,10 @@ void USelectLatticesWidget::InitWidget(FString InUID, TArray<UObject*> InResourc
 		UButton* Button = NewObject<UButton>(this);
 		if (Button)
 		{
-			TScriptDelegate<FWeakObjectPtr> OnSetDragPrt; //建立对接变量
+			FScriptDelegate ScriptDelegate; //建立对接变量
 			FString FunctionName = "OnPressed" + FString::FromInt(i) + "_Event";
-			OnSetDragPrt.BindUFunction(this, *FunctionName); //对接变量绑定函数
-			Button->OnPressed.Add(OnSetDragPrt);
+			ScriptDelegate.BindUFunction(this, *FunctionName); //对接变量绑定函数
+			Button->OnPressed.Add(ScriptDelegate);
 			SetButtonResource(Button, ImageResources.Num() > 0 ? ImageResources[0] : nullptr);
 			UPanelSlot* PanelSlot = HorizontalBoxWidget->AddChild(Button);
 			if (PanelSlot)
@@ -108,50 +108,7 @@ void USelectLatticesWidget::SetButtonResource(UButton* InButton, UObject* InReso
 	}
 }
 
-void USelectLatticesWidget::OnPressed0_Event()
+void USelectLatticesWidget::OnPressed_Event()
 {
-	OnSelect.Broadcast(UID,0);
-	SetSelect(0);
-}
-
-void USelectLatticesWidget::OnPressed1_Event()
-{
-	OnSelect.Broadcast(UID, 1);
-	SetSelect(1);
-}
-
-void USelectLatticesWidget::OnPressed2_Event()
-{
-	OnSelect.Broadcast(UID, 2);
-	SetSelect(2);
-}
-
-void USelectLatticesWidget::OnPressed3_Event()
-{
-	OnSelect.Broadcast(UID, 3);
-	SetSelect(3);
-}
-
-void USelectLatticesWidget::OnPressed4_Event()
-{
-	OnSelect.Broadcast(UID, 4);
-	SetSelect(4);
-}
-
-void USelectLatticesWidget::OnPressed5_Event()
-{
-	OnSelect.Broadcast(UID, 5);
-	SetSelect(5);
-}
-
-void USelectLatticesWidget::OnPressed6_Event()
-{
-	OnSelect.Broadcast(UID, 6);
-	SetSelect(6);
-}
-
-void USelectLatticesWidget::OnPressed7_Event()
-{
-	OnSelect.Broadcast(UID, 7);
-	SetSelect(7);
+	OnSelect.Broadcast(UID);
 }
