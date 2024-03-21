@@ -1,4 +1,4 @@
-/**
+/** *
  * Copyright: Aimo_皑墨
  * Open Source Date: December 27, 2022
  * BiLiBiLi (哔哩哔哩) address: https://space.bilibili.com/146962867
@@ -24,7 +24,7 @@
 
 #include "SettingsLatticeWidget.generated.h"
 
-/**
+/** *
  * 
  */
 UCLASS()
@@ -34,24 +34,24 @@ class UNIVERSALGAMESETTINGS_API USettingsLatticeWidget : public UUserWidget
 
 public:
 
-	UPROPERTY(BlueprintReadOnly, Meta = (BindWidget), Category = "Aimo|Variable")
-		/** 按钮 */
-		UButton* Button_Widget;
+	/** * 按钮控件 */
+	UPROPERTY(BlueprintReadOnly, Meta = (BindWidget), Category = "SettingsLatticeWidget|Variable")
+	TObjectPtr<UButton> Button_Widget;
 
-	UPROPERTY(BlueprintReadOnly, Meta = (BindWidget), Category = "Aimo|Variable")
-		/** 按钮 */
-		UTextBlock* TextBlock_Widget;
+	/** * 文字控件 */
+	UPROPERTY(BlueprintReadOnly, Meta = (BindWidget), Category = "SettingsLatticeWidget|Variable")
+	TObjectPtr<UTextBlock> TextBlock_Widget;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Aimo|Variable")
-		/** 识别的UID */
-		FString UID;
+	/** * 识别的UID */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "SettingsLatticeWidget|Variable")
+	FString UID;
 
-	/** * 委托宏2个输入 */
+	/** * * 委托宏2个输入 */
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCommunication, int, OnType, FString, OnUID);
 
-	UPROPERTY(BlueprintAssignable, Category = "Aimo|On") //蓝图公开并分类
-		/** * 触发的委托变量 */
-		FCommunication OnTrigger; //2 参数的委托定义变量
+	/** * * 触发的委托变量 */
+	UPROPERTY(BlueprintAssignable, Category = "SettingsLatticeWidget|On")
+	FCommunication OnTrigger;
 
 protected:
 
@@ -59,16 +59,16 @@ protected:
 
 public:
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Aimo|Function")
-		/** * 触发的委托事件 */
-		void OnPressed_Event();
-		/** * 原生触发的委托事件 */
+	/** * * 触发的委托事件 */
+	UFUNCTION(BlueprintNativeEvent, Category = "SettingsLatticeWidget|Function")
+	void OnPressed_Event();
+	/** * * 原生触发的委托事件 */
 	virtual void NativeOnPressed_Event();
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Aimo|Function")
-		/** * 初始化数据 */
-		void InitData(const FString& OUID, const FText& OText);
-		/** * 原生初始化数据 */
+	/** * * 初始化数据 */
+	UFUNCTION(BlueprintNativeEvent, Category = "SettingsLatticeWidget|Function")
+	void InitData(const FString& OUID, const FText& OText);
+	/** * * 原生初始化数据 */
 	virtual void NativeInitData(const FString& OUID, const FText& OText);
 
 	

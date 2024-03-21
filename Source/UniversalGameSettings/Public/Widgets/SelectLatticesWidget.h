@@ -1,4 +1,4 @@
-/**
+/** *
  * Copyright: Aimo_皑墨
  * Open Source Date: December 27, 2022
  * BiLiBiLi (哔哩哔哩) address: https://space.bilibili.com/146962867
@@ -25,7 +25,7 @@
 
 #include "SelectLatticesWidget.generated.h"
 
-/**
+/** *
  * 
  */
 UCLASS()
@@ -35,34 +35,34 @@ class UNIVERSALGAMESETTINGS_API USelectLatticesWidget : public UUserWidget
 	
 public:
 
-	UPROPERTY(BlueprintReadOnly, Meta = (BindWidget), Category = "Aimo|Variable")
-		/** 按钮 */
-		USizeBox* SizeBoxWidget;
+	/** * 尺寸框控件 */
+	UPROPERTY(BlueprintReadOnly, Meta = (BindWidget), Category = "SelectLatticesWidget|Variable")
+	TObjectPtr<USizeBox> SizeBoxWidget;
 
-	UPROPERTY(BlueprintReadOnly, Meta = (BindWidget), Category = "Aimo|Variable")
-		/** 按钮 */
-		UHorizontalBox* HorizontalBoxWidget;
+	/** * 水平框控件 */
+	UPROPERTY(BlueprintReadOnly, Meta = (BindWidget), Category = "SelectLatticesWidget|Variable")
+	TObjectPtr<UHorizontalBox> HorizontalBoxWidget;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Aimo|Variable")
-		/** 资源图片组 */
-		TArray<UObject*> ImageResources;
+	/** * 图像资源组 */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "SelectLatticesWidget|Variable")
+	TArray<TObjectPtr<UObject>> ImageResources;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Aimo|Variable")
-		/** 识别的UID */
-		FString UID;
+	/** * 识别的UID */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "SelectLatticesWidget|Variable")
+	FString UID;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Aimo|Variable")
-		/** 选择索引 */
-		int SelectInde;
+	/** * 选择索引 */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "SelectLatticesWidget|Variable")
+	int SelectIndex;
 
 	
 
 
-	/** * 委托宏2个输入 */
+	/** * * 委托宏2个输入 */
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCommunication, FString, OnUID);
 
-	UPROPERTY(BlueprintAssignable, Category = "Aimo|On") //蓝图公开并分类
-		/** * 触发的委托变量 */
+	UPROPERTY(BlueprintAssignable, Category = "SelectLatticesWidget|On") //蓝图公开并分类
+		/** * * 触发的委托变量 */
 		FCommunication OnSelect; //2 参数的委托定义变量
 
 protected:
@@ -71,18 +71,18 @@ protected:
 
 public:
 
-	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
 	/* * 删除所有按钮,重新生成按钮,如果Text不为空生成文字 */
+	UFUNCTION(BlueprintCallable, Category = "SelectLatticesWidget|Function")
 	void InitWidget(FString InUID, TArray<UObject*> InResources, TArray<FText> InTexts,int ButtonNum = 4);
 
-	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
+	UFUNCTION(BlueprintCallable, Category = "SelectLatticesWidget|Function")
 		/* * 修改选项索引 */
 	void SetSelect(int InIndex, UObject* InResource = nullptr);
 
 	void SetButtonResource(UButton* InButton, UObject* InResource = nullptr);
 
-	/* * 最大支持的按钮数量 */
-	UFUNCTION(BlueprintCallable, Category = "Aimo|Function")
+	/* * 触发按下的委托_事件 */
+	UFUNCTION(BlueprintCallable, Category = "SelectLatticesWidget|Function")
 	void OnPressed_Event();
 	
 

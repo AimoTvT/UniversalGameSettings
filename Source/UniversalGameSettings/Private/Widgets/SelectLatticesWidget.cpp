@@ -1,4 +1,4 @@
-/**
+/** *
  * Copyright: Aimo_皑墨
  * Open Source Date: December 27, 2022
  * BiLiBiLi (哔哩哔哩) address: https://space.bilibili.com/146962867
@@ -66,7 +66,7 @@ void USelectLatticesWidget::InitWidget(FString InUID, TArray<UObject*> InResourc
 			}
 		}
 	}
-	SetSelect(SelectInde);
+	SetSelect(SelectIndex);
 }
 
 
@@ -78,9 +78,9 @@ void USelectLatticesWidget::SetSelect(int InIndex, UObject* InResource)
 		UButton* Button = nullptr;
 		if (InIndex >= 0 && Widgets.Num() > InIndex)
 		{
-			if (Widgets[SelectInde])
+			if (Widgets[SelectIndex])
 			{
-				Button = Cast<UButton>(Widgets[SelectInde]);
+				Button = Cast<UButton>(Widgets[SelectIndex]);
 				SetButtonResource(Button, InResource ? InResource : (ImageResources.Num() > 0 ? ImageResources[0] : nullptr));
 			}
 			if (Widgets[InIndex])
@@ -88,7 +88,7 @@ void USelectLatticesWidget::SetSelect(int InIndex, UObject* InResource)
 				Button = Cast<UButton>(Widgets[InIndex]);
 				SetButtonResource(Button, InResource);
 			}
-			SelectInde = InIndex;
+			SelectIndex = InIndex;
 		}
 	}
 }

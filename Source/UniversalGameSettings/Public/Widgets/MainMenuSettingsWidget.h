@@ -1,4 +1,4 @@
-/**
+/** *
  * Copyright: Aimo_皑墨
  * Open Source Date: December 27, 2022
  * BiLiBiLi (哔哩哔哩) address: https://space.bilibili.com/146962867
@@ -25,7 +25,7 @@
 
 #include "MainMenuSettingsWidget.generated.h"
 
-/**
+/** *
  * 
  */
 UCLASS()
@@ -35,27 +35,27 @@ class UNIVERSALGAMESETTINGS_API UMainMenuSettingsWidget : public UUserWidget
 	
 public:
 
-	/** 设置类型选项框 */
+	/** * 设置类型选项框控件 */
 	UPROPERTY(BlueprintReadOnly, Meta = (BindWidget), Category = "MainMenuSettingsWidget|Variable")
 	TObjectPtr<USelectScrollBox>  SelectScrollBox;
 
-	/** 切换控件 */
+	/** * 切换控件 */
 	UPROPERTY(BlueprintReadOnly, Meta = (BindWidget), Category = "MainMenuSettingsWidget|Variable")
 	TObjectPtr<UWidgetSwitcher> WidgetSwitcher;
 
-	/** 识别的UID */
+	/** * 识别的UID */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MainMenuSettingsWidget|Variable")
 	TArray<FString> IDs;
 
-	/** 类型名字 */
+	/** * 类型名字 */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MainMenuSettingsWidget|Variable")
 	TArray<FText> ButtonNames;
 
-	/** 已生成的控件组 */
+	/** * 已生成的控件组 */
 	UPROPERTY(BlueprintReadWrite, Category = "MainMenuSettingsWidget|Variable")
 	TArray<TObjectPtr<UWidget>> WidgetSwitcherWidgets;
 
-	/** 对应按钮点击生成的控件类组 */
+	/** * 对应按钮点击生成的控件类组 */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MainMenuSettingsWidget|Variable")
 	TArray<TSoftClassPtr<class UWidget>> WidgetSwitcherSoftClassPtr;
 		
@@ -67,12 +67,12 @@ protected:
 
 public:
 
+	/** * 初始化控件 */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MainMenuSettingsWidget|Function")
-		/** 初始化控件 */
 		void InitWdiget();
 
+		/** * 调用触发事件 */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MainMenuSettingsWidget|Function")
-		/** 调用触发事件 */
 		void OnTrigger_Event(const FString& OnID, const FString& SelectID);
 		void NativeOnTrigger_Event(const FString& OnID, const FString& SelectID);
 
