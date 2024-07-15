@@ -1,4 +1,4 @@
-/**
+/** *
  * Copyright: Aimo_皑墨
  * Open Source Date: December 27, 2022
  * BiLiBiLi (哔哩哔哩) address: https://space.bilibili.com/146962867
@@ -16,7 +16,9 @@
 
 
 #include "Widgets/MainMenuSettingsWidget.h"
-#include "Widgets/SettingsLatticeWidget.h"
+#include "Kismet/GameplayStatics.h"
+
+#include "Widgets/ChildSettingWidget.h"
 
 void UMainMenuSettingsWidget::NativePreConstruct()
 {
@@ -39,61 +41,51 @@ void UMainMenuSettingsWidget::NativeConstruct()
 void UMainMenuSettingsWidget::InitWdiget_Implementation()
 {
 	WidgetSwitcherWidgets.SetNum(ButtonNames.Num());
-	if (VerticalBox_Lootices && !ButtonSoftClassPtr.IsNull())
+	if (SelectScrollBox)
 	{
-		TSubclassOf<class UUserWidget> ButtonClass;
-		if (ButtonSoftClassPtr.IsValid())
-		{
-			ButtonClass = ButtonSoftClassPtr.Get();
-		}
-		else
-		{
-			ButtonClass = ButtonSoftClassPtr.LoadSynchronous();
-		}
-		UUserWidget* UserWidget;
-		VerticalBox_Lootices->ClearChildren();
-		for (size_t i = 0; i < ButtonNames.Num(); i++)
-		{
-			UserWidget = CreateWidget<UUserWidget>(GetOwningPlayer(), ButtonClass); /** * 生成按钮UI */
-			if (UserWidget)
-			{
-				UserWidget->SetPadding({ 0.0f, 0.0f, 0.0f, 10.0f });
-				VerticalBox_Lootices->AddChild(UserWidget);
-				USettingsLatticeWidget* SettingsLatticeWidget = Cast<USettingsLatticeWidget>(UserWidget);
-				if (SettingsLatticeWidget)
-				{
-					SettingsLatticeWidget->InitData(ButtonNames[i].ToString(), ButtonNames[i]);
-					TScriptDelegate<FWeakObjectPtr> OnSetDragPrt; //建立对接变量
-					OnSetDragPrt.BindUFunction(this, "OnTrigger_Event"); //对接变量绑定函数
-					SettingsLatticeWidget->OnTrigger.Add(OnSetDragPrt);
-				}
-			}
-		}
+		SelectScrollBox->InitData(IDs, ButtonNames);
+		SelectScrollBox->OnClickedSelect.AddDynamic(this, &UMainMenuSettingsWidget::OnTrigger_Event);
+		ExtensionSelectScrollBox->OnClickedSelect.AddDynamic(this, &UMainMenuSettingsWidget::OnExtensionTrigger_Event);
 		if (ButtonNames.Num() > 0)
 		{
-			NativeOnTrigger_Event(0, ButtonNames[0].ToString());
+			NativeOnTrigger_Event("", IDs[0]);
 		}
 	}
 }
 
 
-void UMainMenuSettingsWidget::NativeOnTrigger_Event(int OnType, FString OnUID)
-{
-	int Index = 0;
-	for (size_t i = 0; i < ButtonNames.Num(); i++)
-	{
-		if (ButtonNames[i].ToString() == OnUID)
-		{
-			Index = i;
-			break;
-		}
-	}
 
+void UMainMenuSettingsWidget::OnTrigger_Event_Implementation(const FString& OnID, const FString& SelectID)
+{
+	NativeOnTrigger_Event(OnID, SelectID);
+}
+
+
+void UMainMenuSettingsWidget::NativeOnTrigger_Event(const FString& OnID, const FString& SelectID)
+{
+	int Index = IDs.Find(SelectID);
 	if (Index != -1)
 	{
+		if (ButtonNames.IsValidIndex(Index))
+		{
+			PromptText(ButtonNames[Index]);
+		}
 		if (WidgetSwitcherWidgets.Num() > Index && WidgetSwitcherWidgets[Index])
 		{
-			WidgetSwitcher->SetActiveWidget(WidgetSwitcherWidgets[Index]);
+			if (Index != WidgetSwitcher->GetActiveWidgetIndex())
+			{
+				WidgetSwitcher->SetActiveWidget(WidgetSwitcherWidgets[Index]);
+				UChildSettingWidget* ChildSettingWidget = Cast<UChildSettingWidget>(WidgetSwitcherWidgets[Index]);
+				if (ChildSettingWidget)
+				{
+					ExtensionNames(ChildSettingWidget->ExtensionButtonNames);
+				}
+				else
+				{
+					ExtensionNames(TArray<FText>());
+				}
+			}
+			return;
 		}
 		else
 		{
@@ -101,24 +93,110 @@ void UMainMenuSettingsWidget::NativeOnTrigger_Event(int OnType, FString OnUID)
 			{
 				
 				TSubclassOf<class UUserWidget> WidgetClass = WidgetSwitcherSoftClassPtr[Index].LoadSynchronous();
-				UWidget* Widget = nullptr;
 				if (WidgetClass)
 				{
-					Widget = CreateWidget<UUserWidget>(GetOwningPlayer(), WidgetClass);
+					UWidget* Widget = CreateWidget<UUserWidget>(GetOwningPlayer(), WidgetClass);
 					if (Widget)
 					{
+						WidgetSwitcherWidgets[Index] = Widget;
+						UChildSettingWidget* ChildSettingWidget = Cast<UChildSettingWidget>(Widget);
+						if (ChildSettingWidget)
+						{
+							ChildSettingWidget->SetMyMainMenuSettingsWidget(this); 
+							ExtensionNames(ChildSettingWidget->ExtensionButtonNames);
+						}
+						else
+						{
+							ExtensionNames(TArray<FText>());
+						}
 						WidgetSwitcher->AddChild(Widget);
 						WidgetSwitcher->SetActiveWidget(Widget);
-						WidgetSwitcherWidgets[Index] = Widget;
 					}
 				}
 			}
 		}
 	}
-} 
-
-void UMainMenuSettingsWidget::OnTrigger_Event_Implementation(int& OnType, FString& OnUID)
-{
-	NativeOnTrigger_Event(OnType,OnUID); 
+	return;
 }
 
+USettingSave* UMainMenuSettingsWidget::GetSettingSave(int32 UserIndex)
+{
+	if (MySettingSave)
+	{
+		return MySettingSave;
+	}
+	if (UGameplayStatics::DoesSaveGameExist(SettingSaveName, UserIndex))
+	{
+		USaveGame* LoadSaveGame = UGameplayStatics::LoadGameFromSlot(SettingSaveName, UserIndex);
+		if (LoadSaveGame)
+		{
+			MySettingSave = Cast<USettingSave>(LoadSaveGame);
+			if (MySettingSave)
+			{
+				return MySettingSave;
+			}
+			UGameplayStatics::DeleteGameInSlot(SettingSaveName, UserIndex);
+		}
+	}
+	USaveGame* SaveGame = UGameplayStatics::CreateSaveGameObject(USettingSave::StaticClass());
+	if (SaveGame)
+	{
+		UGameplayStatics::SaveGameToSlot(SaveGame, SettingSaveName, UserIndex);
+		MySettingSave = Cast<USettingSave>(SaveGame);
+	}
+	return MySettingSave;
+}
+
+bool UMainMenuSettingsWidget::SaveSettingSave(USettingSave* InSettingSave, int32 UserIndex)
+{
+	if (InSettingSave)
+	{
+		return UGameplayStatics::SaveGameToSlot(InSettingSave, SettingSaveName, UserIndex);
+	}
+	return false;
+}
+
+void UMainMenuSettingsWidget::ExtensionNames_Implementation(const TArray<FText>& ExtensionButtonNames)
+{
+	if (ExtensionButtonNames.Num())
+	{
+		TArray<FString> Indexs;
+		for (size_t i = 0; i < ExtensionButtonNames.Num(); i++)
+		{
+			Indexs.Add(FString::FromInt(i));
+		}
+		ExtensionSelectScrollBox->InitData(Indexs, ExtensionButtonNames);
+	}
+	else
+	{
+		ExtensionSelectScrollBox->InitData({}, {});
+	}
+
+}
+
+
+
+void UMainMenuSettingsWidget::OnExtensionTrigger_Event(const FString& OnID, const FString& SelectID)
+{
+	if (WidgetSwitcher->GetActiveWidget())
+	{
+		UChildSettingWidget* ChildSettingWidget = Cast<UChildSettingWidget>(WidgetSwitcher->GetActiveWidget());
+		if (ChildSettingWidget)
+		{
+			ChildSettingWidget->ExtensionTrigger(FCString::Atoi(*SelectID));
+		}
+	}
+}
+
+void UMainMenuSettingsWidget::PromptText_Implementation(const FText& InText)
+{
+	NativePromptText(InText);
+}
+
+void UMainMenuSettingsWidget::NativePromptText(const FText& InText)
+{
+	if (PromptTextWidget)
+	{
+		PromptTextWidget->SetText(InText);
+	}
+}
