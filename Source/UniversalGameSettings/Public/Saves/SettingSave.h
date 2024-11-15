@@ -37,5 +37,13 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "SettingSave|Variable")
 	float VoiceSoundVolume = 1.0f;
 
+	/** *  */
+	UPROPERTY(BlueprintReadWrite, Category = "SettingSave|Variable")
+	float UISoundVolume = 1.0f;
+
+	/** *  */
+	UPROPERTY(BlueprintReadWrite, Category = "SettingSave|Variable")
+	float UserVoiceSoundVolume = 1.0f;
+
 
 };

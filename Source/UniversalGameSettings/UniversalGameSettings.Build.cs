@@ -55,6 +55,7 @@ public class UniversalGameSettings : ModuleRules
                 "UMG",
                 "ResourcesExpansions",
                 "WidgetExpansions",
+                "UniversalMods",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
