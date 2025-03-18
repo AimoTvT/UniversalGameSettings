@@ -53,7 +53,6 @@ public class UniversalGameSettings : ModuleRules
 				"Slate",
 				"SlateCore",
                 "UMG",
-                "WidgetExpansions",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
