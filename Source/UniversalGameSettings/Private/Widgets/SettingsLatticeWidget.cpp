@@ -1,4 +1,4 @@
-/** *
+/**
  * Copyright: Aimo_皑墨
  * Open Source Date: December 27, 2022
  * BiLiBiLi (哔哩哔哩) address: https://space.bilibili.com/146962867
@@ -23,9 +23,9 @@ void USettingsLatticeWidget::NativeConstruct()
 
 	if (Button_Widget)
 	{
-		FScriptDelegate ScriptDelegate; //建立对接变量
-		ScriptDelegate.BindUFunction(this, "OnPressed_Event"); //对接变量绑定函数
-		Button_Widget->OnPressed.Add(ScriptDelegate);
+		TScriptDelegate<FWeakObjectPtr> OnSetDragPrt; //建立对接变量
+		OnSetDragPrt.BindUFunction(this, "OnPressed_Event"); //对接变量绑定函数
+		Button_Widget->OnPressed.Add(OnSetDragPrt);
 	}
 
 }

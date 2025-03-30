@@ -1,4 +1,4 @@
-/** *
+/**
  * Copyright: Aimo_皑墨
  * Open Source Date: December 27, 2022
  * BiLiBiLi (哔哩哔哩) address: https://space.bilibili.com/146962867
@@ -39,23 +39,56 @@ void UMainMenuSettingsWidget::NativeConstruct()
 void UMainMenuSettingsWidget::InitWdiget_Implementation()
 {
 	WidgetSwitcherWidgets.SetNum(ButtonNames.Num());
-	if (SelectScrollBox)
+	if (VerticalBox_Lootices && !ButtonSoftClassPtr.IsNull())
 	{
-		SelectScrollBox->InitData(IDs, ButtonNames);
-		FScriptDelegate ScriptDelegate; //建立对接变量
-		ScriptDelegate.BindUFunction(this, "OnTrigger_Event"); //对接变量绑定函数
-		SelectScrollBox->OnClickedSelect.Add(ScriptDelegate);
+		TSubclassOf<class UUserWidget> ButtonClass;
+		if (ButtonSoftClassPtr.IsValid())
+		{
+			ButtonClass = ButtonSoftClassPtr.Get();
+		}
+		else
+		{
+			ButtonClass = ButtonSoftClassPtr.LoadSynchronous();
+		}
+		UUserWidget* UserWidget;
+		VerticalBox_Lootices->ClearChildren();
+		for (size_t i = 0; i < ButtonNames.Num(); i++)
+		{
+			UserWidget = CreateWidget<UUserWidget>(GetOwningPlayer(), ButtonClass); /** * 生成按钮UI */
+			if (UserWidget)
+			{
+				UserWidget->SetPadding({ 0.0f, 0.0f, 0.0f, 10.0f });
+				VerticalBox_Lootices->AddChild(UserWidget);
+				USettingsLatticeWidget* SettingsLatticeWidget = Cast<USettingsLatticeWidget>(UserWidget);
+				if (SettingsLatticeWidget)
+				{
+					SettingsLatticeWidget->InitData(ButtonNames[i].ToString(), ButtonNames[i]);
+					TScriptDelegate<FWeakObjectPtr> OnSetDragPrt; //建立对接变量
+					OnSetDragPrt.BindUFunction(this, "OnTrigger_Event"); //对接变量绑定函数
+					SettingsLatticeWidget->OnTrigger.Add(OnSetDragPrt);
+				}
+			}
+		}
 		if (ButtonNames.Num() > 0)
 		{
-			NativeOnTrigger_Event("", IDs[0]);
+			NativeOnTrigger_Event(0, ButtonNames[0].ToString());
 		}
 	}
 }
 
 
-void UMainMenuSettingsWidget::NativeOnTrigger_Event(const FString& OnID, const FString& SelectID)
+void UMainMenuSettingsWidget::NativeOnTrigger_Event(int OnType, FString OnUID)
 {
-	int Index = IDs.Find(SelectID);
+	int Index = 0;
+	for (size_t i = 0; i < ButtonNames.Num(); i++)
+	{
+		if (ButtonNames[i].ToString() == OnUID)
+		{
+			Index = i;
+			break;
+		}
+	}
+
 	if (Index != -1)
 	{
 		if (WidgetSwitcherWidgets.Num() > Index && WidgetSwitcherWidgets[Index])
@@ -68,9 +101,10 @@ void UMainMenuSettingsWidget::NativeOnTrigger_Event(const FString& OnID, const F
 			{
 				
 				TSubclassOf<class UUserWidget> WidgetClass = WidgetSwitcherSoftClassPtr[Index].LoadSynchronous();
+				UWidget* Widget = nullptr;
 				if (WidgetClass)
 				{
-					UWidget* Widget = CreateWidget<UUserWidget>(GetOwningPlayer(), WidgetClass);
+					Widget = CreateWidget<UUserWidget>(GetOwningPlayer(), WidgetClass);
 					if (Widget)
 					{
 						WidgetSwitcher->AddChild(Widget);
@@ -83,8 +117,8 @@ void UMainMenuSettingsWidget::NativeOnTrigger_Event(const FString& OnID, const F
 	}
 } 
 
-void UMainMenuSettingsWidget::OnTrigger_Event_Implementation(const FString& OnID, const FString& SelectID)
+void UMainMenuSettingsWidget::OnTrigger_Event_Implementation(int& OnType, FString& OnUID)
 {
-	NativeOnTrigger_Event(OnID, SelectID);
+	NativeOnTrigger_Event(OnType,OnUID); 
 }
 
